@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Drupal 8 Module Development</title>
+
+		<meta name="description" content="Drupal 8 Module Development">
+		<meta name="author" content="Jesus Manuel Olivas">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style"
+					content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,
+		maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/simple.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<!-- <link rel="stylesheet" href="lib/css/zenburn.css"> -->
+		<link rel="stylesheet" href="lib/css/tomorrow-night-bright.css">
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container displayed as slide -->
+			<div class="slides">
+
+				<section data-background-image="assets/images/srijan-back.png">
+					<br/>
+					<h1 class="big">Drupal 8 Module Development</h1>
+<!-- 					<p>
+						<img class="no-border" src="assets/images/sandcamp-logo.png" >
+					</p> -->
+					<aside class="notes">
+						
+					</aside>
+				</section>
+
+				<section>
+					<h2>About me</h2>
+					<hr>
+					<div class="half">
+						<img src="assets/images/jmolivas.jpg" >
+						<br/>
+						<div>
+							<h3 class="name">Jesus Manuel Olivas</h3>
+							<h3 class="name">Drupal 8 Solutions Engineer</h3>
+						</div>
+						<div  class="text-small">
+							<p>
+							<a target="_blank"  href="http://twitter.com/jmolivas" target="_blank">@jmolivas</a> | 
+							<a target="_blank"  href="http://twitter.com/drupalconsole" target="_blank">@drupalconsole</a>
+							</p>
+							<a target="_blank"  href="http://twitter.com/drupodcast" target="_blank">@drupodcast</a>
+						</div>
+					</div>
+					<div class="half">
+						<p>
+							<br/><br/><br/>
+							<img src="assets/images/ffw-logo.png"  class="no-border">
+							<br/><br/><br/><br/><br/>
+						</p>
+						<div>
+							<h3 class="name">I work for FFW</h3>
+							<h3 class="name"><i>(and you should too)</i></h3>
+						</div>
+					</div>
+					<aside class="notes">
+						<p>My names is ....</p>
+						<p>I work for FFW (Formely knonw as Blink reaction & Propeople)</p>
+					</aside>
+				</section>
+
+				<section>
+					<p>
+					This training is <strike>stolen</strike> based on:
+					</p>
+					<br/>
+					<p>
+						<h2 class="title">Drupal 8 The Crash Course</h2>
+					</p>
+					<p>
+						Presented at ZendCon by <a href="http://www.garfieldtech.com/">Larry Garfield</a> (<a href="http://twitter.com/Crell">@Crell</a>)
+					</p>
+					<br/>
+					<p>
+						<a href="https://www.palantir.net/presentations/zendcon2015-d8-crash-course/">
+						https://www.palantir.net/presentations/zendcon2015-d8-crash-course/
+						</a> 
+					</p>
+				</section>
+
+				<section>
+					<h2>Part I</h2>
+					<hr/>
+					<ul class="bullets">
+						<li>Basic concepts</li>
+						<li>Composer</li>
+						<li>The HTTP Lifecycle</li>
+						<li>Tools</li>
+						<li>Download and Install Drupal 8</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Part II</h2>
+					<hr/>
+					<ul class="bullets">
+						<li>Creating a Module</li>
+						<li>Creating a Custom Page</li>
+						<li>Rendering a Twig Template</li>
+						<li>Creating a Config Form</li>
+						<li>Creating a Block (Plugin)</li>
+						<li>Creating a Service</li>
+					</ul>
+				</section>
+
+				<section data-background="#0076C2">
+					<h1 class="white big">Basic concepts</h1>
+				</section>
+
+				<section >
+					<h2>Drupal is more technically advanced</h2>
+					<hr>
+					<img class="no-border" src="assets/images/drupal-8-logo.png">
+					<aside class="notes">
+						<p>
+							Drupal 8 is more technically advanced compared to its predecessor.
+						</p>
+						<p>
+							Managing the increasing complexity of Drupal 8 could be an overwhelming task for anyone. 
+						</p>
+						<p>
+							Writing a Drupal 8 module now involves a lot more boilerplate code and there is a lot you need to know and do just to get started building a new module. 
+						</p>
+					</aside>
+				</section>
+
+				<section>
+					<h2>Drupal 8: All Improved for Developers</h2>
+					<hr/>
+					<img class="no-border" src="assets/images/drupal-8-changes.png">
+					<aside class="notes">
+						<p>
+							I will list some differences between Drupal 8 and 7, related to writing a module.
+						</p>
+							<ul>
+								<li>Drupal 8 is object oriented and Drupal 7 is mostly procedural.</li>
+								<li>Each class will need a namespace and must be created within and specific directory.</li>
+								<li>Each class must include other classes defined within a namespace.</li>
+								<li>Each class could extend or implement another classes.</li>
+								<li>Drupal 8 takes advantage of external libraries.</li>
+								<li>Drupal 8 uses .yml files for configuration.</li>
+								<li>Drupal 8 uses plugins which provide reusable pieces of functionality.</li>
+								<li>Drupal 8 uses PHP annotations. The Drupal 8 plugin system uses them to describe plugins and they are used by Drupal to discover your plugin.</li>
+							</ul>
+					</aside>
+				</section>
+
+				<section>
+					<h2>Composer</h2>
+					<hr/>
+	            		<p>
+	            			<img class="no-border" src="assets/images/composer-logo.png">	
+	            		</p>
+	            		<br/>
+	            		<p>
+							Dependency Manager for PHP. 
+	            		</p>
+	            		<br/>
+	            		<p>
+	            			<a href="http://getcomposer.org/">http://getcomposer.org/</a>
+	            		</p>
+
+	            		<aside class="notes">
+	            			<ul class="bullets">
+	            				<li>Composer is a Dependency Manager for PHP.</li>
+	            				<li>It allows you to declare the dependent libraries your project needs and take care of downloading.</li>
+	            				<li>Probably the library you are requiring it also dependent on another library or libraries, well worry not composer will resolve that too.</li>
+	            			</ul>
+	            		</aside>
+
+				</section>
+
+				<section data-background="#000000">
+					<h2 class="white">Download Composer</h2>
+<pre><code class="shell text-normal">
+# Run this in your terminal to get the latest project version:
+curl -sS https://getcomposer.org/installer | php
+
+# Apply executable permissions on the downloaded file:
+mv composer.phar /usr/local/bin/composer
+
+# Apply executable permissions on the downloaded file:
+chmod +x /usr/local/bin/composer
+</code></pre>
+				</section>
+
+				<section data-background="#000000">
+					<h2 class="white">How to use Composer [1/2]</h2>
+					<hr/>
+
+<pre><code class="bash text-medium">
+$ composer init 
+
+$ composer search faker
+
+$ composer show fzaninotto/faker
+
+$ composer require fzaninotto/faker:v1.3.0
+
+</code></pre>
+				</section>
+
+				<section data-background="#000000">
+					<h2 class="white">How to use Composer [2/2]</h2>
+					<hr/>
+
+<pre><code class="bash text-medium">
+/* composer.json */
+{
+    "require": {
+        "fzaninotto/faker": "v1.3.0"
+    }
+}
+
+$ composer install
+
+$ composer update
+
+$ composer show --installed
+
+</code></pre>
+				</section>
+
+				<section data-background="#0076C2">
+					<h1 class="white big">The HTTP Lifecycle</h1>
+				</section>
+
+				<section>
+					<h3 class="title">
+						In every web application, in any language, you always have one goal, read and understand the incoming HTTP request in order to create and return the appropriate HTTP response.
+					</h3>
+					<aside class="notes">
+						<p>In every web application regardless of the used language or framework.</p>
+						<p>You are probably working with PHP using Symfony, Silex, Drupal or Laravel or may you are working with Pyhton using Django or Flask, how about Ruby using Rails or Java developing with Scala.</p>
+						<p>Your only goal as a web developer is to properly understand the incoming HTTP Request in order to build and return and appropiate HTTP response.</p>
+						<p>The client sends an HTTP request. When I said client this could be a web-site, mobile app or even an application runing from the terminal.</p>
+						<p>Now as I mentioned before it is your responsability to build a proper response, this will be based on what the client is asking for, this could be anything form a HTML page to JSON, XML even and attachment or a multimedia file as well.</p>
+					</aside>
+				</section>
+
+				<section>
+					<h2>The Request/Response Flow</h2>
+					<hr/>
+					<br/>
+					<img src="assets/images/request-response-flow.png" class="no-border" />
+					<aside class="notes">
+						<p>Well the flow looks like this.</p>
+						<p>Symfony/Silex/Drupal use the front controller design-pattern. This mean every single request is routed from a PHP file app.php or app_ENV.php in the case of Symfony and index.php if using Silex or Drupal. The main goal of the front controller is to bootstrap your Application and performing the global initialization of required objects.</p>
+						<p>Also takes care of extracting information form the requested URL about the path and match this on the routing system and then execute the proper Controller.</p>
+					</aside>
+				</section>
+
+				<section>
+					<p>
+						<img src="assets/images/request-response-drupal.png" class="no-border" />	
+					</p>
+					<p>
+						<a href="http://www.wellnet.it/en/blog/how-drupal-8-builds-your-pages-infographic">How Drupal 8 builds your pages</a>	
+					</p>
+					
+				</section>
+
+	        <section>
+	          <h2>Routing</h2>
+	          <hr/>
+	          <br/>
+	          <h3 class="title">A route is a map from a URL path to a controller.</h3>
+			  <aside class="notes">
+				<p>We can define a Route as a map from a URL to a controller.</p>
+				<p>Is in the route definition where where we especify the path for a resource and the controller that will be executed.</p>
+				<p>Now that I have been mentioning the Controller</p>
+			  </aside>
+	        </section>
+
+	        <section>
+	          <h2>Controller</h2>
+			  <hr/>
+			  <br/>
+	          <h3 class="title">A controller is a PHP method or call-back that takes information from the HTTP request and constructs and returns an HTTP response.</he>
+			  <aside class="notes">
+				<p>A Controller is a method or call-back that takes information from the HTTP request object and based on the implemented code contructs and returns a proper HTTP response.</p>
+				<p>Lets see how these two looks in code.</p>
+			  </aside>
+	        </section>
+
+				<section data-background="#0076C2">
+					<h1 class="white big">Tools</h1>
+				</section>
+	
+				<section>
+					<ul class="bullets">
+						<li>PHP built-in server + SQLite</li>
+						<li>*AMP (Local, VM, Container)</li>
+						<li>DevDesktop, Kalabox</li>
+						<li>Drupal Console</li>
+						<li>IDE (PHPStorm, Eclipse)</li>
+					</ul>
+				</section>
+
+				<section data-background="#000000">
+					<h2 class="white">Download Drupal Console</h2>
+<pre><code class="shell text-normal">
+# Run this in your terminal to get the latest project version:
+curl https://drupalconsole.com/installer -L -o drupal.phar
+
+# Accessing from anywhere on your system:
+mv drupal.phar /usr/local/bin/drupal
+
+# Apply executable permissions on the downloaded file:
+chmod +x /usr/local/bin/drupal
+
+# Copy configuration files to user home directory:
+drupal init --override
+</code></pre>
+				</section>
+
+		<section data-background="#000000">
+			<h2 class="white">Copy configuration files</h2>
+			<h4 class="white">drupal init</h4>
+			<img class="no-border" src="assets/images/drupal-init.png" alt="">
+			<aside class="notes">
+				<p>
+					Use the init command to copy the configurations files, overriding values on these files is how you can change DrupalConsole behaviour. 
+				</p>
+			</aside>
+		</section>
+
+		<section data-background="#0076C2">
+			<h1 class="white big">Download and Install</h1>
+			<h1 class="white big">Drupal 8</h1>
+		</section>
+
+		<section data-background="#000">
+			<h2 class="white">Drupal 8 download</h2>
+			<hr/>
+<pre><code class="bash text-medium">
+$ drupal site:new drupal8.dev
+
+$ drupal site:new drupal8.dev 8.0.3
+
+</code></pre>
+		</section>
+
+		<section data-background="#000">
+			<h2 class="white">site:new</h2>
+			<hr/>
+			<p>
+				<img class="no-border" src="assets/images/drupal-site-new.png">
+			</p>
+			<aside class="notes">
+				<p>
+					You can download Drupal 8 using the site:new command.
+				</p>
+			</aside>
+		</section>
+
+		<section data-background="#000">
+			<h2 class="white">Drupal 8 installation</h2>
+			<hr/>
+<pre><code class="bash text-medium">
+$ drupal site:install
+
+
+$ drupal site:install  standard --langcode="en" 
+         --db-type="mysql" --db-host="127.0.0.1" 
+         --db-name="drupal" --db-user="root" 
+         --db-pass="root" --db-port="3306" 
+         --site-name="Drupal 8 Site Install" 
+         --site-mail="admin@example.com" 
+         --account-name="admin" 
+         --account-mail="admin@example.com" 
+         --account-pass="admin"
+         --no-interaction
+</code></pre>
+		</section>
+
+		<section data-background="#000">
+			<h2 class="white">site:install</h2>
+			<hr/>
+			<p>
+				<img class="no-border" src="assets/images/drupal-site-install.png">
+			</p>
+			<aside class="notes">
+				<p>
+					You can install Drupal 8 using the site:install command.
+				</p>
+			</aside>
+		</section>
+
+				<section data-background="#0076C2">
+					<h1 class="medium white">Creating a Module</h1>
+				</section>
+
+				<section>
+					<h2>Creating a module</h2>
+					<hr/>
+					<p>
+					<ul class="bullets">
+						<li>
+							Create a new directory named <em>'hugs'</em> at <em>'modules/custom'</em> directory.
+						</li>
+						<li>
+							Create an <em>'hugs.info.yml'</em> file at <em>'modules/custom/hugs'</em> directory.
+						</li>
+					</ul>
+					</p>
+					<p>
+					<h3 class="note">
+						Custom and contributed modules must be created at modules folder in the root directory.
+					</h3>
+					</p>
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">modules/hugs/hugs.info.yml</h2>
+<pre><code class="yaml text-big">
+name: Hugs
+type: module
+description: Examples of hugs
+core: 8.x
+package: Other
+
+</code></pre>
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">Generate module</h2>
+<pre><code class="text-big">
+$ drupal generate:module
+
+</code></pre>
+				</section>
+<!-- 
+				<section>
+					<img class="no-border" src="assets/images/hugs-generate-module.png">
+				</section>
+ -->
+				<section data-background="#000">
+					<h2 class="white">Install module</h2>
+<pre><code class="text-big">
+$ drupal module:install hugs
+
+</code></pre>
+				</section>
+
+				<section data-background="#0076C2">
+					<h1 class="medium white">Creating a Custom Page</h1>
+					<aside class="notes">
+						<p>
+							In Drupal 8 we won’t need hook_menu() anymore as we make heavy use of the Symfony2 components to handle the routing. This involves defining the routes as configuration and handling the callback in a controller (the method of a Controller class).
+						</p>
+					</aside>
+				</section>
+
+				<section>
+					<h2>Creating a Custom Page</h2>
+					<hr/>
+					<ul class="bullets">
+						<li>
+						<p>
+							Create a <em>'HugsController'</em> Class with a <em>'hug'</em> method at <em>'src/Controller'</em> Directory.
+						</p>
+						</li>
+						<li><p>
+							Create a route with path to <em>'/hug/{from}/{to}'</em> at <em>'hugs.routing.yml'</em> file.
+						</p></li>
+					</ul>
+					<h3 class="note">
+						Make sure your HugsController class extends from ControllerBase core class.
+					</h3>
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">Generate Controller</h2>
+<pre><code class="text-big">
+$ drupal generate:controller
+
+</code></pre>
+				</section>
+<!-- 
+				<section>
+					<img class="no-border" src="assets/images/hugs-generate-controller.png">
+				</section>
+ -->
+				<section data-background="#000">
+					<h2 class="white">src/Controller/HugsController.php</h2>
+					<hr/>
+<pre><code class="php text-normal">
+namespace Drupal\hugs\Controller;
+
+use Drupal\Core\Controller\ControllerBase;
+
+class HugsController extends ControllerBase {
+
+  public function hug($from, $to) {
+    return [
+      '#type' => 'markup',
+      '#markup' => $this->t(
+        'Implement method: hug with parameter(s): $from, $to'
+      )
+    ];
+  }
+}
+
+</code></pre>
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">hugs.routing.yaml</h2>
+					<hr/>
+<pre><code class="yaml text-normal">
+hugs.hugs_controller_hug:
+  path: '/hug/{from}/{to}'
+  defaults:
+    _controller: '\Drupal\hugs\Controller\HugsController::hug'
+    _title: 'Hugs'
+  requirements:
+    _permission: 'access content'
+
+</code></pre>
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">src/Controller/HugsController.php</h2>
+					<hr/>
+<pre><code class="php text-normal">
+...
+  public function hug($to, $from) {
+    $message = $this->t('%from sends hugs to %to', [
+      '%from' => $from,
+      '%to' => $to,
+    ]);
+
+    return ['#markup' => $message];
+  }
+...
+
+</code></pre>
+				</section>
+
+				<section data-background="#0076C2">
+					<h1 class="medium white">Rendering a Twig Template</h1>
+				</section>
+
+				<section>
+					<h2>Rendering a Twig Template</h2>
+					<hr/>
+
+				 	<ul class="bullets">
+					 	<li>Create 'templates/hug_page.html.twig' file.</li>
+						<li>Create the 'hugs.module' file.</li>
+						<li>Add <em>'hugs_theme'</em> method and register template.</li>
+						<li>Update render array on <em>hug</em> at <em></em> HugsController class.</li>
+					</ul>
+
+					<h3 class="note">
+						If you used the generate:module command hugs.module file already exists.
+					</h3> 
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">templates/hug_page.html.twig</h2>
+					<hr/>
+<pre><code class="django text-normal">
+{% trans %}
+  <strong>{{ from }}</strong> hugs <em>{{ to }}</em>
+{% endtrans %}
+
+</code></pre>
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">hugs.module</h2>
+					<hr/>
+<pre><code class="php text-normal">
+  function hugs_theme() {
+    $theme['hug_page'] = [
+      'variables' => ['from' => NULL, 'to' => NULL],
+      'template' => 'hug_page',
+    ];
+
+    return $theme;
+  }
+
+</code></pre>
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">src/Controller/HugsController.php</h2>
+					<hr/>
+<pre><code class="php text-normal">
+...
+  public function hug($to, $from) {
+    return [
+      '#theme' => 'hug_page',
+      '#from' => $from,
+      '#to' => $to,
+    ];
+  }
+...
+
+</code></pre>
+				</section>
+
+				<section data-background="#0076C2">
+					<h1 class="medium white">Creating a Config Form</h1>
+				</section>
+
+				<section>
+					<h2>Creating a Config Form</h2>
+					<hr/>
+
+				 	<ul class="bullets">
+					 	<li>Create a 'HugConfigForm.php' class at <em>'src/Form'</em> Directory.</li>
+					 	<li>Create a route with path to <em>'/admin/config/hugs/hugconfig'</em> at <em>'hugs.routing.yml'</em>.</li>
+					 	<li>Add hugs.links.menu.yml file and set <em>system.admin_config_system</em> as parent.</li>
+					</ul>
+
+					<h3 class="note">
+						Make sure you use _form instead of _controller on route defaults.
+					</h3> 
+				</section>
+<!-- 
+				<section>
+					<img class="no-border" src="assets/images/generate-form-config.png">
+				</section>
+ -->			
+				<section data-background="#000">
+					<h2 class="white">src/Form/HugConfigForm.php [1/2]</h2>
+					<hr/>
+<pre><code class="php text-normal">
+namespace Drupal\hugs\Form;
+
+use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Form\FormStateInterface;
+
+class HugConfigForm extends ConfigFormBase {
+
+  protected function getEditableConfigNames() {
+    return [
+      'hugs.hugconfig'
+    ];
+  }
+
+  public function getFormId() {
+    return 'hug_config_form';
+  }
+
+  ...
+</code></pre>
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">src/Form/HugConfigForm.php 2/2</h2>
+					<hr/>
+<pre><code class="php text-normal"> ...
+
+ public function buildForm(array $form, FormStateInterface $form_state) {
+    $config = $this->config('hugs.hugconfig');
+    $form['count'] = array(
+      '#type' => 'number',
+      '#title' => $this->t('Count'),
+      '#description' => $this->t('Default hug count'),
+      '#default_value' => $config->get('count'),
+    );
+
+    return parent::buildForm($form, $form_state);
+  }
+
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    parent::submitForm($form, $form_state);
+
+    $this->config('hugs.hugconfig')
+      ->set('count', $form_state->getValue('count'))
+      ->save();
+  }
+}
+</code></pre>
+				</section>	
+
+				<section data-background="#000">
+					<h2 class="white">hugs.routing.yml</h2>
+					<hr/>
+<pre><code class="yaml text-medium">
+hugs.hug_config:
+  path: '/admin/config/hugs/hugconfig'
+  defaults:
+    _form: '\Drupal\hugs\Form\HugConfigForm'
+    _title: 'HugConfigForm'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE
+
+</code></pre>
+				</section>	
+
+				<section data-background="#000">
+					<h2 class="white">hugs.links.menu.yml (Menu Link)</h2>
+					<hr/>
+<pre><code class="yaml text-medium">
+hugs.hug_config_form_link:
+  title: 'Hugs configuration'
+  description: 'Configure the hugs system'
+  route_name: hugs.hug_config_form
+  parent: system.admin_config_system
+
+</code></pre>
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">hugs.routing.yml (add count)</h2>
+					<hr/>
+<pre><code class="yaml text-normal">
+hugs.hugs_controller_hug:
+  path: '/hug/{from}/{to}/{count}'
+  defaults:
+    _controller: '\Drupal\hugs\Controller\HugsController::hug'
+    _title: 'Hugs'
+    count: 0
+  requirements:
+    _permission: 'access content'
+
+</code></pre>
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">src/Controller/HugsController.php (count)</h2>
+					<hr/>
+<pre><code class="php text-normal">
+...
+  public function hug($from, $to, $count) {
+    if (!$count) {
+      $count = $this->config('hugs.hugconfig')->get('count');
+    }
+    return [
+      '#theme' => 'hug_page',
+      '#from' => $from,
+      '#to' => $to,
+      '#count' => $count
+    ];
+  }
+...
+</code></pre>
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">hugs.module (count)</h2>
+					<hr/>
+<pre><code class="php text-normal">
+  function hugs_theme() {
+    $theme['hug_page'] = [
+      'variables' => ['from' => NULL, 'to' => NULL, 'count' => NULL],
+      'template' => 'hug_page',
+    ];
+
+    return $theme;
+  }
+
+</code></pre>
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">templates/hug_page.html.twig</h2>
+					<hr/>
+<pre><code class="text">
+{% trans %}
+  <strong>{{ from }}</strong> hugs <em>{{ to }}</em> {{ count }} time.
+{% plural count %}
+  <strong>{{ from }}</strong> hugs <em>{{ to }}</em> {{ count }} times.
+{% endtrans %}
+
+</code></pre>
+				</section>
+
+				<section data-background="#0076C2">
+					<h1 class="medium white">Creating a Block (Plugin)</h1>
+				</section>
+
+				<section>
+					<h2>Creating a Block (Plugin)</h2>
+					<hr/>
+
+				 	<ul class="bullets">
+					 	<li>Create a <em>'HugStatus'</em> class at <em>'src/Plugin/Block'</em>.</li>
+					 	<li>Extend from <em>BlockBase</em> core class.</li>
+					 	<li>Add <em>@Block</em> annotation.</li>
+					 	<li>Add <em>blockForm</em>, <em>blockSubmit</em> and <em>build</em> methods.</li>
+					</ul>
+					<h3 class="note">
+						Adding the @Block annotation, make this block discoverable by the system.
+					</h3> 
+				</section>
+
+<!--
+ 				<section>
+					<img class="no-border" src="assets/images/generate-plugin-block.png">
+				</section> 
+-->
+				<section data-background="#000">
+					<h2 class="white">src/Plugin/Block/HugStatus.php [1/2]</h2>
+					<hr/>
+<pre><code class="php text-normal">namespace Drupal\hugs\Plugin\Block;
+
+use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * @Block(
+ *  id = "hug_status",
+ *  admin_label = @Translation("Hug status"),
+ * )
+ */
+class HugStatus extends BlockBase {
+
+  public function blockForm($form, FormStateInterface $form_state) {
+    $form['enabled'] = array(
+      '#type' => 'checkbox',
+      '#title' => $this->t('Hugging enabled'),
+      '#description' => $this->t('Check for Hugging enabled website'),
+      '#default_value' => isset($this->configuration['enabled']) ? $this->configuration['enabled'] : '',
+    );
+
+    return $form;
+  }
+
+</code></pre>
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">src/Plugin/Block/HugStatus.php [2/2]</h2>
+					<hr/>
+<pre><code class="php text-normal">
+  ...
+
+  public function blockSubmit($form, FormStateInterface $form_state) {
+    $this->configuration['enabled'] = $form_state->getValue('enabled');
+  }
+
+  public function build() {
+    $build = [];
+    $build['hug_status_enabled']['#markup'] = 
+      '<p>' . $this->configuration['enabled'] . '</p>';
+
+    return $build;
+  }
+}
+
+</code></pre>
+				</section>
+
+				<section data-background="#000">
+					<h2 class="white">src/Plugin/Block/HugStatus.php (update)</h2>
+					<hr/>
+<pre><code class="php text-normal">
+ public function build() {
+    $message = $this->configuration['enabled']
+      ? $this->t('Now accepting hugs')
+      : $this->t('No hugs :-(');
+
+    return ['#markup' => $message];
+  }
+  
+</code></pre>
+				</section>
+
+				<section>
+					<h2>Questions & Feedback</h2>
+					<hr/>
+					<h3 class="title">Feel free to stalk me or ask any question at:</h3>
+					<br/>
+					<h2 class="dark-blue">@jmolivas</h2>
+				</section>
+
+			</div>
+		</div>
+
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.js"></script>
+
+	<script type="text/javascript" src="lib/js/jquery.min.js"></script>
+
+	<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: false,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'slide', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/leap/leap.js', async: true }
+					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+		<link rel="stylesheet" href="assets/css/custom.css">
+
+	</body>
+</html>
